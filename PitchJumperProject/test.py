@@ -157,17 +157,15 @@ def main():
             match event.type:
                 case pygame.QUIT:
                     running = False
-
-        keys = pygame.key.get_pressed()
-        # Перемещение персонажа по нажатию клавиш WASD
-        if keys[pygame.K_w]:
-            player.move(0, -1, tile_map)
-        if keys[pygame.K_s]:
-            player.move(0, 1, tile_map)
-        if keys[pygame.K_a]:
-            player.move(-1, 0, tile_map)
-        if keys[pygame.K_d]:
-            player.move(1, 0, tile_map)
+                case pygame.KEYDOWN:  # Обрабатываем только нажатие клавиш
+                    if event.key == pygame.K_w:
+                        player.move(0, -1, tile_map)
+                    if event.key == pygame.K_s:
+                        player.move(0, 1, tile_map)
+                    if event.key == pygame.K_a:
+                        player.move(-1, 0, tile_map)
+                    if event.key == pygame.K_d:
+                        player.move(1, 0, tile_map)
 
         # Вычисление смещения для центрирования камеры на персонаже
         offset_x = (screen.get_width() - map_width) // 2 - player.x * tile_size + map_width // 2 - tile_size // 2
