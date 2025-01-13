@@ -1,9 +1,11 @@
 import pygame
 import os
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_FILE, FONT_PATH, FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_FILE, FONT_PATH, \
+    FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE
 from tilemap import TileMap
 from player import Player
 from hud import HUD
+
 
 def main():
     pygame.init()
@@ -39,16 +41,17 @@ def main():
                 case pygame.QUIT:
                     running = False
                 case pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        running = False
-                    elif event.key == pygame.K_w:
-                        player.move(0, -1, tile_map)
-                    elif event.key == pygame.K_s:
-                        player.move(0, 1, tile_map)
-                    elif event.key == pygame.K_a:
-                        player.move(-1, 0, tile_map)
-                    elif event.key == pygame.K_d:
-                        player.move(1, 0, tile_map)
+                    match event.key:
+                        case pygame.K_ESCAPE:
+                            running = False
+                        case pygame.K_w:
+                            player.move(0, -1, tile_map)
+                        case pygame.K_s:
+                            player.move(0, 1, tile_map)
+                        case pygame.K_a:
+                            player.move(-1, 0, tile_map)
+                        case pygame.K_d:
+                            player.move(1, 0, tile_map)
 
         # Вычисление смещения для камеры
         offset_x = (screen.get_width() - map_width) // 2 - player.x * TILE_SIZE + map_width // 2 - TILE_SIZE // 2
@@ -67,6 +70,7 @@ def main():
         clock.tick(FPS)
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
