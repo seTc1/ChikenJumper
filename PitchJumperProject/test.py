@@ -112,13 +112,15 @@ class Player:
         screen.blit(self.image, (self.x * self.tile_size + offset_x, self.y * self.tile_size + offset_y))
 
     def move(self, dx, dy, tile_map):
-        # Перемещение персонажа на одну клетку в заданном направлении
         new_x = self.x + dx
         new_y = self.y + dy
 
-        # Проверка границ карты и препятствий
+        # Проверка границ карты
         if 0 <= new_x < len(tile_map.tiles[0]) and 0 <= new_y < len(tile_map.tiles):
-            if tile_map.tiles[new_y][new_x] != "Null":
+            tile_name, _ = tile_map.parse_tile_name(tile_map.tiles[new_y][new_x])
+
+            # Проверяем, является ли тайл проходимым
+            if tile_name in ["PathTile1", "PathTile2", "PathTile3"]:  # Только дорожки
                 self.x = new_x
                 self.y = new_y
 
