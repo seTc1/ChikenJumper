@@ -3,6 +3,7 @@ import os
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_FILE, FONT_PATH, FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE
 from tilemap import TileMap
 from player import Player
+from hud import HUD
 
 def main():
     pygame.init()
@@ -24,6 +25,9 @@ def main():
     # Создание игрока
     player = Player(os.path.join(TEXTURE_FOLDER, PLAYER_TEXTURE), tile_map.start_pos, TILE_SIZE)
 
+    # Создание интерфейса
+    hud = HUD(screen)
+
     # Вычисление размеров карты
     map_width = len(tile_map.tiles[0]) * TILE_SIZE
     map_height = len(tile_map.tiles) * TILE_SIZE
@@ -34,27 +38,33 @@ def main():
             match event.type:
                 case pygame.QUIT:
                     running = False
-                case pygame.KEYDOWN:  # Обработка нажатия клавиш
-                    if event.key == pygame.K_w:
+                case pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        running = False
+                    elif event.key == pygame.K_w:
                         player.move(0, -1, tile_map)
-                    if event.key == pygame.K_s:
+                    elif event.key == pygame.K_s:
                         player.move(0, 1, tile_map)
-                    if event.key == pygame.K_a:
+                    elif event.key == pygame.K_a:
                         player.move(-1, 0, tile_map)
-                    if event.key == pygame.K_d:
+                    elif event.key == pygame.K_d:
                         player.move(1, 0, tile_map)
 
-        # Вычисление смещения для центрирования камеры на персонаже
+        # Вычисление смещения для камеры
         offset_x = (screen.get_width() - map_width) // 2 - player.x * TILE_SIZE + map_width // 2 - TILE_SIZE // 2
         offset_y = (screen.get_height() - map_height) // 2 - player.y * TILE_SIZE + map_height // 2 - TILE_SIZE // 2
 
-        # Очистка экрана и обновление кадра
-        screen.fill(BACKGROUND_COLOR)  # Заполнение экрана цветом фона
-        tile_map.draw(offset_x, offset_y)  # Рисование карты
-        player.draw(screen, offset_x, offset_y)  # Рисование персонажа
+        # Очистка экрана
+        screen.fill(BACKGROUND_COLOR)
 
-        clock.tick(FPS)  # Ограничение FPS
-        pygame.display.flip()  # Обновление экрана
+        # Отрисовка элементов
+        tile_map.draw(offset_x, offset_y)
+        player.draw(screen, offset_x, offset_y)
+        hud.draw_hp(player.hp)
+
+        # Обновление экрана
+        pygame.display.flip()
+        clock.tick(FPS)
 
     pygame.quit()
 

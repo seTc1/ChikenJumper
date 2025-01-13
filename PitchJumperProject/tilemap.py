@@ -76,6 +76,10 @@ class TileMap:
                     ))
                     self.screen.blit(text_surface, text_rect)
 
+    def clear_tile_value(self, x, y):
+        tile_name, _ = self.parse_tile_name(self.tiles[y][x])
+        self.tiles[y][x] = tile_name  # Сбрасываем значение клетки, оставляя только её имя
+
     def parse_tile_name(self, tile_name):
         # Разделение имени тайла и значения, если оно есть
         if "(" in tile_name and ")" in tile_name:
