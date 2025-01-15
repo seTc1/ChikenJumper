@@ -1,14 +1,15 @@
 import pygame
+from constants import FONT_PATH, BACKGROUND_COLOR
 
 
 class MainMenu:
-    def __init__(self, screen, font_path=None, font_size=48):
+    def __init__(self, screen, font_size=48):
         self.screen = screen
-        self.font = pygame.font.Font(font_path, font_size) if font_path else pygame.font.SysFont(None, font_size)
-        self.menu_items = ["Start Game", "Exit"]
+        self.font = pygame.font.Font(FONT_PATH, font_size) if FONT_PATH else pygame.font.SysFont(None, font_size)
+        self.menu_items = ["Начать игру", "Выход"]
         self.selected_index = 0
-        self.bg_color = (0, 50, 0)
-        self.text_color = (200, 200, 200)
+        self.bg_color = BACKGROUND_COLOR
+        self.text_color = (255, 255, 255)
         self.selected_color = (255, 0, 0)
 
     def draw(self):
@@ -27,8 +28,8 @@ class MainMenu:
             elif event.key == pygame.K_s:
                 self.selected_index = (self.selected_index + 1) % len(self.menu_items)
             elif event.key == pygame.K_RETURN:
-                if self.menu_items[self.selected_index] == "Start Game":
+                if self.menu_items[self.selected_index] == "Начать игру":
                     return "start_game"
-                elif self.menu_items[self.selected_index] == "Exit":
+                elif self.menu_items[self.selected_index] == "Выход":
                     return "exit"
         return None
