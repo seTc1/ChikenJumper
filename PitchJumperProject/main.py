@@ -5,18 +5,40 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, T
 from tilemap import TileMap
 from player import Player
 from hud import HUD
+from main_menu import MainMenu
 
 
 def main():
     pygame.init()
-    pygame.display.set_caption("Chicken Jump")  # Установка заголовка окна
+    pygame.display.set_caption("Chicken Jump")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN if FULLSCREEN else 0)
-    clock = pygame.time.Clock()  # Часы для ограничения FPS
+    clock = pygame.time.Clock()
+
+    # Главное меню
+    menu = MainMenu(screen)
+    in_menu = True
+
+    while in_menu:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+
+            action = menu.handle_event(event)
+            if action == "start_game":
+                in_menu = False
+            elif action == "exit":
+                pygame.quit()
+                return
+
+        menu.draw()
+        pygame.display.flip()
+        clock.tick(FPS)
 
     # Создание карты уровня
     tile_map = TileMap(LEVEL_FILE, TEXTURE_FOLDER, TILE_SIZE, screen)
     try:
-        tile_map.set_font(FONT_PATH, FONT_SIZE)  # Установка пользовательского шрифта
+        tile_map.set_font(FONT_PATH, FONT_SIZE)
     except FileNotFoundError as e:
         print(e)
 
@@ -53,19 +75,15 @@ def main():
                         case pygame.K_d:
                             player.move(1, 0, tile_map)
 
-        # Вычисление смещения для камеры
         offset_x = (screen.get_width() - map_width) // 2 - player.x * TILE_SIZE + map_width // 2 - TILE_SIZE // 2
         offset_y = (screen.get_height() - map_height) // 2 - player.y * TILE_SIZE + map_height // 2 - TILE_SIZE // 2
 
-        # Очистка экрана
         screen.fill(BACKGROUND_COLOR)
 
-        # Отрисовка элементов
         tile_map.draw(offset_x, offset_y)
         player.draw(screen, offset_x, offset_y)
         hud.draw_hp(player.hp)
 
-        # Обновление экрана
         pygame.display.flip()
         clock.tick(FPS)
 
