@@ -8,6 +8,7 @@ FPS = 60  # Количество кадров в секунду
 TILE_SIZE = 64  # Размер одной клетки тайла
 LEVEL_FILE = "Level_1.txt"  # Файл с уровнем
 TEXTURE_FOLDER = "Textures"  # Папка с текстурами
+LEFT_ARROW_SPRITE = "Textures\LeftArrow.png"  # Папка с текстурами
 FONT_PATH = "pixel.otf"  # Путь к пользовательскому шрифту
 FONT_SIZE = 24  # Размер пользовательского шрифта
 BACKGROUND_COLOR = (91, 145, 76)  # Цвет фона экрана
