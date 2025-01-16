@@ -1,6 +1,5 @@
 import os
 import pygame
-from constants import TILE_SIZE, TEXTURE_FOLDER, LEVEL_FILE
 
 class TileMap:
     def __init__(self, level_file, texture_folder, tile_size, screen):
@@ -87,3 +86,9 @@ class TileMap:
             value = int(value.strip("()"))
             return name, value
         return tile_name, None
+
+    def check_if_end(self, check_pos):
+        if self.end_pos == check_pos:
+            return True
+        else:
+            return False

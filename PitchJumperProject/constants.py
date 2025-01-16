@@ -6,7 +6,7 @@ FPS = 60  # Количество кадров в секунду
 
 # Настройки тайлов
 TILE_SIZE = 64  # Размер одной клетки тайла
-LEVEL_FILE = "Level_1.txt"  # Файл с уровнем
+LEVEL_NAMES = ["Level_1.txt", "Level_2.txt"]  # Файл с уровнем
 TEXTURE_FOLDER = "Textures"  # Папка с текстурами
 LEFT_ARROW_SPRITE = "Textures\LeftArrow.png"  # Папка с текстурами
 FONT_PATH = "pixel.otf"  # Путь к пользовательскому шрифту
@@ -17,3 +17,7 @@ PASSABLE_TILES = ["PathTile1", "PathTile2", "PathTile3"]  # Проходимые
 HEART_TEXTURE = "Textures\Heart.png"  # Текстура сердца
 HEART_SIZE = 100  # Размер спрайта сердца
 HP_TEXT_SIZE = 50  # Размер текста здоровья
+
+# Добавление функции получения следующего уровня
+def get_next_level(current_level_id):
+    return LEVEL_NAMES[current_level_id + 1] if current_level_id + 1 < len(LEVEL_NAMES) else None
