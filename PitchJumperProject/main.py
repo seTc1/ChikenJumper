@@ -33,7 +33,9 @@ def display_main_menu(screen, clock):
                 pygame.quit()
                 return False
 
+
         menu.draw()  # Отрисовка меню
+
         pygame.display.flip()  # Обновление экрана
         clock.tick(FPS)  # Ограничение FPS
 
@@ -131,6 +133,7 @@ def main():
         offset_x = (screen.get_width() - map_width) // 2 - player.x * TILE_SIZE + map_width // 2 - TILE_SIZE // 2
         offset_y = (screen.get_height() - map_height) // 2 - player.y * TILE_SIZE + map_height // 2 - TILE_SIZE // 2
 
+        player.update()
         draw_game(screen, tile_map, player, hud, offset_x, offset_y)
         clock.tick(FPS)
 
