@@ -19,7 +19,7 @@ class Player:
         screen.blit(self.image, (self.x * self.tile_size + offset_x, self.y * self.tile_size + offset_y))
 
     def move(self, dx, dy, tile_map, screen):
-        from main import main  # Импорт здесь предотвращает циклический импорт
+        from main import new_level  # Импорт здесь предотвращает циклический импорт
         if self.game_over: return
         new_x = self.x + dx
         new_y = self.y + dy
@@ -30,7 +30,7 @@ class Player:
                 self.x = new_x
                 self.y = new_y
                 if tile_map.check_if_end((new_x, new_y)):
-                    pass
+                    new_level(screen)
                 total_hp_change = -1
                 if tile_value is not None:
                     total_hp_change += tile_value

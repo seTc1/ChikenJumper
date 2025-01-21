@@ -13,11 +13,9 @@ FONT_PATH = "pixel.otf"  # Путь к пользовательскому шри
 FONT_SIZE = 24  # Размер пользовательского шрифта
 BACKGROUND_COLOR = (91, 145, 76)  # Цвет фона экрана
 PLAYER_TEXTURE = "ChikenIdle.png"  # Текстура персонажа
+CHIKEN_ANIM_TEXTURES = ["ChikenIdle.png", "ChikenRun_1.png", "ChikenRun_2.png"]
+CHIKEN_ANIM_SPEED = 1
 PASSABLE_TILES = ["PathTile1", "PathTile2", "PathTile3"]  # Проходимые тайлы
 HEART_TEXTURE = "Textures\Heart.png"  # Текстура сердца
 HEART_SIZE = 100  # Размер спрайта сердца
 HP_TEXT_SIZE = 50  # Размер текста здоровья
-
-# Добавление функции получения следующего уровня
-def get_next_level(current_level_id):
-    return LEVEL_NAMES[current_level_id + 1] if current_level_id + 1 < len(LEVEL_NAMES) else None
