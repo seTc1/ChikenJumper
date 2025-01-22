@@ -25,7 +25,6 @@ class Player:
                                  (self.y * self.tile_size + offset_y) + self.offset_y))
 
     def move(self, dx, dy, tile_map, screen):
-        from main import new_level
         if self.game_over or self.moving: return
         new_x = self.x + dx
         new_y = self.y + dy
@@ -39,7 +38,8 @@ class Player:
                 self.move_dx = dx * self.speed
                 self.move_dy = dy * self.speed
                 if tile_map.check_if_end((new_x, new_y)):
-                    new_level(screen)
+                    pass
+                    # Появления финального меню
                 total_hp_change = -1
                 if tile_value is not None:
                     total_hp_change += tile_value
