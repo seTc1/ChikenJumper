@@ -30,13 +30,16 @@ class Player:
                                  (self.y * self.tile_size + offset_y) + self.offset_y))
 
     def move(self, dx, dy, tile_map, screen):
-        if self.game_over or self.moving:
+        if self.hp <= 0 or self.moving:  # Проверка, не закончилась ли игра и не идет ли движение
             return
+
         new_x = self.x + dx
         new_y = self.y + dy
 
+        # Проверяем, находится ли новая позиция в пределах карты
         if 0 <= new_x < len(tile_map.tiles[0]) and 0 <= new_y < len(tile_map.tiles):
             tile_name, tile_value = tile_map.parse_tile_name(tile_map.tiles[new_y][new_x])
+
             if tile_name in PASSABLE_TILES:
                 self.target_x = new_x
                 self.target_y = new_y
@@ -47,12 +50,15 @@ class Player:
                 self.anim_timer = 0
 
                 if tile_map.check_if_end((new_x, new_y)):
-                    pass
+                    self.game_over = True
+                    return
 
                 total_hp_change = -1
                 if tile_value is not None:
                     total_hp_change += tile_value
+
                 self.change_hp(total_hp_change)
+
                 tile_map.clear_tile_value(new_x, new_y)
 
     def update(self):

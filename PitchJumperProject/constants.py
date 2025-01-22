@@ -30,3 +30,9 @@ CHIKEN_RUN_ANIM_SPEED = 4.2
 CHIKEN_IDLE_ANIM_TEXTURES = ["ChikenIdle.png", "ChikenIdle_1.png", "ChikenIdle_2.png", "ChikenIdle_1.png",
                              "ChikenIdle.png"]
 CHIKEN_IDLE_ANIM_SPEED = 7
+
+GAME_OVER_TEXT = "Game Over"
+VICTORY_TEXT = "Victory"
+TEXT_COLOR = (255, 255, 255)
+OVERLAY_COLOR = (0, 0, 0, 180)
+FONT_SIZE_LARGE = 72  # Крупный размер шрифта для экранов
