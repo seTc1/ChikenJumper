@@ -4,7 +4,7 @@ import pygame
 class TileMap:
     def __init__(self, level_file, texture_folder, tile_size, screen):
         # Инициализация карты тайлов
-        self.level_file = level_file
+        self.level_file = f"Levels\\{level_file}"
         self.texture_folder = texture_folder
         self.tile_size = tile_size
         self.screen = screen
