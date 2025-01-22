@@ -40,7 +40,7 @@ class Player:
         if 0 <= new_x < len(tile_map.tiles[0]) and 0 <= new_y < len(tile_map.tiles):
             tile_name, tile_value = tile_map.parse_tile_name(tile_map.tiles[new_y][new_x])
 
-            if tile_name in PASSABLE_TILES:
+            if tile_name in PASSABLE_TILES or tile_name == "SeedsPack":
                 self.target_x = new_x
                 self.target_y = new_y
                 self.moving = True
@@ -50,8 +50,9 @@ class Player:
                 self.anim_timer = 0
 
                 if tile_map.check_if_end((new_x, new_y)):
-                    self.game_over = True
-                    return
+                    # Вместо завершения игры просто отмечаем, что уровень завершен
+                    tile_map.clear_tile_value(new_x, new_y)
+                    return "level_complete"
 
                 total_hp_change = -1
                 if tile_value is not None:
@@ -60,6 +61,9 @@ class Player:
                 self.change_hp(total_hp_change)
 
                 tile_map.clear_tile_value(new_x, new_y)
+
+                if tile_name == "SeedsPack":
+                    tile_map.clear_tile_value(new_x, new_y)
 
     def update(self):
         if self.moving:

@@ -35,4 +35,4 @@ GAME_OVER_TEXT = "Game Over"
 VICTORY_TEXT = "Victory"
 TEXT_COLOR = (255, 255, 255)
 OVERLAY_COLOR = (0, 0, 0, 180)
-FONT_SIZE_LARGE = 72  # Крупный размер шрифта для экранов
+FONT_SIZE_LARGE = 52  # Крупный размер шрифта для экранов

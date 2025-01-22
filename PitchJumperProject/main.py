@@ -1,7 +1,8 @@
 import pygame
 import os
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_NAMES, FONT_PATH, \
-    FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE, VICTORY_TEXT, GAME_OVER_TEXT, OVERLAY_COLOR, FONT_SIZE_LARGE, TEXT_COLOR
+    FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE, VICTORY_TEXT, GAME_OVER_TEXT, OVERLAY_COLOR, FONT_SIZE_LARGE, \
+    TEXT_COLOR
 from tilemap import TileMap
 from player_controller import Player
 from hud import HUD
@@ -12,7 +13,8 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("Chicken Jump")
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN if FULLSCREEN else 0, vsync=1)
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN if FULLSCREEN else 0,
+                                              vsync=1)
         self.clock = pygame.time.Clock()
         self.current_level_id = 0
         self.running = True
@@ -21,6 +23,7 @@ class Game:
         self.hud = None
         self.camera_x = 0
         self.camera_y = 0
+        self.level_complete = False
 
     def display_main_menu(self):
         menu = MainMenu(self.screen)
@@ -39,17 +42,31 @@ class Game:
             pygame.display.flip()
             self.clock.tick(FPS)
 
-    def show_end_screen(self, message):
+    def show_end_screen(self, message, next_level=False):
+        # Создание полупрозрачного оверлея
         overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
         overlay.fill(OVERLAY_COLOR)
         self.screen.blit(overlay, (0, 0))
 
+        # Отображение основного сообщения
         font = pygame.font.Font(FONT_PATH, FONT_SIZE_LARGE)
         text_surface = font.render(message, True, TEXT_COLOR)
-        text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        text_rect = text_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
         self.screen.blit(text_surface, text_rect)
+
+        # Отображение инструкции
+        if next_level:
+            instruction_text = "Нажмите N, чтобы перейти на следующий уровень"
+        else:
+            instruction_text = "Нажмите любую клавишу, чтобы продолжить"
+
+        instruction_surface = font.render(instruction_text, True, TEXT_COLOR)
+        instruction_rect = instruction_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+        self.screen.blit(instruction_surface, instruction_rect)
+        # Обновление экрана
         pygame.display.flip()
 
+        # Ожидание нажатия клавиши
         waiting = True
         while waiting:
             for event in pygame.event.get():
@@ -57,7 +74,11 @@ class Game:
                     pygame.quit()
                     exit()
                 if event.type == pygame.KEYDOWN:
-                    waiting = False
+                    if next_level and event.key == pygame.K_n:
+                        waiting = False  # Переключение на следующий уровень
+                        self.start_new_level()  # Здесь нужно реализовать логику перехода на следующий уровень
+                    elif not next_level:
+                        waiting = False  # Просто продолжаем игру
 
     def load_level(self):
         print(LEVEL_NAMES[self.current_level_id])
@@ -86,6 +107,10 @@ class Game:
             self.current_level_id = 0  # Возврат к первому уровню, если достигнут конец списка
         return self.load_level()
 
+    def start_new_level(self):
+        if not self.next_level():
+            self.running = False
+
     def draw_game(self):
         self.screen.fill(BACKGROUND_COLOR)
         self.camera_x += (self.player.x * TILE_SIZE + self.player.offset_x - self.camera_x) * 0.1
@@ -98,6 +123,7 @@ class Game:
         pygame.display.flip()
 
     def game_loop(self):
+        self.level_complete = False
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -108,22 +134,19 @@ class Game:
                     elif event.key == pygame.K_r:
                         if not self.restart_level():
                             return
-                    elif event.key == pygame.K_n:
-                        if not self.next_level():
-                            return
+                    elif event.key == pygame.K_n and self.level_complete:
+                        self.start_new_level()
+                        self.level_complete = False
                     elif event.key in [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d]:
                         moves = {pygame.K_w: (0, -1), pygame.K_s: (0, 1), pygame.K_a: (-1, 0), pygame.K_d: (1, 0)}
-                        self.player.move(*moves[event.key], self.tile_map, self.screen)
+                        if self.player.move(*moves[event.key], self.tile_map, self.screen) == "level_complete":
+                            self.show_end_screen("Победа!", next_level=True)
+                            self.level_complete = True
 
             self.player.update()
             if self.player.hp <= 0:
-                self.show_end_screen(GAME_OVER_TEXT)
+                self.show_end_screen(GAME_OVER_TEXT, next_level=False)
                 self.restart_level()
-                return
-
-            if self.tile_map.check_if_end((self.player.x, self.player.y)):
-                self.show_end_screen(VICTORY_TEXT)
-                self.next_level()
                 return
 
             self.draw_game()
