@@ -13,7 +13,7 @@ class Player:
         self.target_x, self.target_y = self.x, self.y
         self.tile_size = tile_size
         self.game_over = False
-        self.hp = 10
+        self.hp = 100
         self.moving = False
         self.speed = TILE_SIZE / (FPS // 3)
         self.offset_x = 0
