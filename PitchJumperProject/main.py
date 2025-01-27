@@ -25,6 +25,21 @@ class Game:
         self.camera_x = 0
         self.camera_y = 0
         self.level_complete = False
+        self.SOUNDS_FOLDER = r"C:\Users\Vova\Documents\GitHub\ChikenJumper\PitchJumperProject\ZVYKI"
+        self.victory_sound = self.load_sound("victorySound.mp3")
+        self.button_click_sound = self.load_sound("button_click.wav")
+
+    def load_sound(self, file_name):
+        sound_path = os.path.join(self.SOUNDS_FOLDER, file_name)
+        if os.path.exists(sound_path):
+            return pygame.mixer.Sound(sound_path)
+        else:
+            print(f"Warning: Sound file '{file_name}' not found in '{self.SOUNDS_FOLDER}'.")
+            return None
+
+    def play_sound(self, sound):
+        if sound:
+            sound.play()
 
     def display_main_menu(self):
         menu = MainMenu(self.screen)
@@ -99,15 +114,17 @@ class Game:
                             case pygame.K_ESCAPE:
                                 self.running = False
                             case pygame.K_r:
+                                self.play_sound(self.button_click_sound)
                                 if not self.restart_level():
                                     return
                             case pygame.K_n if self.level_complete:
+                                self.play_sound(self.button_click_sound)
                                 self.start_new_level()
                                 self.level_complete = False
                             case pygame.K_w | pygame.K_s | pygame.K_a | pygame.K_d:
                                 moves = {pygame.K_w: (0, -1), pygame.K_s: (0, 1), pygame.K_a: (-1, 0),
                                          pygame.K_d: (1, 0)}
-                                if self.player.move(*moves[event.key], self.tile_map, self.screen) == "level_complete":
+                                if self.player.move(*moves[event.key], self.tile_map) == "level_complete":
                                     pygame.time.set_timer(pygame.USEREVENT, 500, True)
                                     self.level_complete = True
 

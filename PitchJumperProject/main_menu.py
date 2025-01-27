@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import FONT_PATH, BACKGROUND_COLOR, LEFT_ARROW_SPRITE
 
 
@@ -18,6 +19,21 @@ class MainMenu:
         arrow_width = int(arrow_image.get_width() * arrow_scale)
         arrow_height = int(arrow_image.get_height() * arrow_scale)
         self.arrow_sprite = pygame.transform.scale(arrow_image, (arrow_width, arrow_height))
+
+        self.SOUNDS_FOLDER = r"C:\Users\Vova\Documents\GitHub\ChikenJumper\PitchJumperProject\ZVYKI"
+        self.button_click_sound = self.load_sound("button_click.wav")
+
+    def load_sound(self, file_name):
+        sound_path = os.path.join(self.SOUNDS_FOLDER, file_name)
+        if os.path.exists(sound_path):
+            return pygame.mixer.Sound(sound_path)
+        else:
+            print(f"Warning: Sound file '{file_name}' not found in '{self.SOUNDS_FOLDER}'.")
+            return None
+
+    def play_sound(self, sound):
+        if sound:
+            sound.play()
 
     def draw(self):
         self.screen.fill(self.bg_color)  # Заливка фона
@@ -40,6 +56,7 @@ class MainMenu:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
+            self.play_sound(self.button_click_sound)
             if event.key == pygame.K_w:  # Перемещение вверх по меню
                 self.selected_index = (self.selected_index - 1) % len(self.menu_items)
             elif event.key == pygame.K_s:  # Перемещение вниз по меню
