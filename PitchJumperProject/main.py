@@ -128,7 +128,7 @@ class Game:
                                     pygame.time.set_timer(pygame.USEREVENT, 500, True)
                                     self.level_complete = True
 
-            self.player.update()
+            self.player.update(self.tile_map)
 
             self.draw_game()
             self.clock.tick(FPS)
