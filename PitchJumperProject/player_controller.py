@@ -1,3 +1,4 @@
+import random
 import pygame
 import os
 from constants import TILE_SIZE, CHIKEN_RUN_ANIM_TEXTURES, CHIKEN_RUN_ANIM_SPEED, PLAYER_TEXTURE, PASSABLE_TILES, FPS, \
@@ -22,6 +23,8 @@ class Player:
         self.move_dy = 0
         self.anim_index = 0
         self.anim_timer = 0
+        self.facing_right = True  # Направление спрайта
+
         self.plus_sound = self.load_sound("plusCell.wav")
         self.minus_sound = self.load_sound("minusCell.wav")
         self.victory_sound = self.load_sound("victorySound.mp3")
@@ -29,7 +32,9 @@ class Player:
     def load_sound(self, file_name):
         sound_path = os.path.join(SOUNDS_FOLDER, file_name)
         if os.path.exists(sound_path):
-            return pygame.mixer.Sound(sound_path)
+            sound = pygame.mixer.Sound(sound_path)
+            sound.set_volume(0.5)  # Делаем звук тише
+            return sound
         else:
             print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
             return None
@@ -41,8 +46,9 @@ class Player:
     def draw(self, screen, offset_x, offset_y):
         if self.game_over:
             return
-        screen.blit(self.image, ((self.x * self.tile_size + offset_x) + self.offset_x,
-                                 (self.y * self.tile_size + offset_y) + self.offset_y))
+        image = pygame.transform.flip(self.image, not self.facing_right, False)  # Флип изображения
+        screen.blit(image, ((self.x * self.tile_size + offset_x) + self.offset_x,
+                            (self.y * self.tile_size + offset_y) + self.offset_y))
 
     def move(self, dx, dy, tile_map):
         if self.hp <= 0 or self.moving:  # Проверка, не закончилась ли игра и не идет ли движение
@@ -51,7 +57,11 @@ class Player:
         new_x = self.x + dx
         new_y = self.y + dy
 
-        # Проверяем, находится ли новая позиция в пределах карты
+        if dx < 0:
+            self.facing_right = False  # Поворачиваем влево
+        elif dx > 0:
+            self.facing_right = True  # Поворачиваем вправо
+
         if 0 <= new_x < len(tile_map.tiles[0]) and 0 <= new_y < len(tile_map.tiles):
             tile_name, tile_value = tile_map.parse_tile_name(tile_map.tiles[new_y][new_x])
 
@@ -69,16 +79,15 @@ class Player:
                     self.play_sound(self.victory_sound)
                     return "level_complete"
 
-                total_hp_change = -1
-                if tile_value is not None:
-                    total_hp_change += tile_value
+                total_hp_change = tile_value if tile_value is not None else 0
 
-                if total_hp_change < 0:
-                    self.play_sound(self.minus_sound)
-                elif total_hp_change > 0:
+                if total_hp_change > 0:
                     self.play_sound(self.plus_sound)
+                elif total_hp_change < 0:
+                    self.play_sound(self.minus_sound)
 
-                self.change_hp(total_hp_change)
+                if total_hp_change != 0:  # Убираем звук, если значение 0
+                    self.change_hp(total_hp_change)
 
                 tile_map.clear_tile_value(new_x, new_y)
 

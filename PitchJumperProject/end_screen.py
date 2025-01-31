@@ -1,11 +1,13 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, OVERLAY_COLOR, FONT_PATH, FONT_SIZE_LARGE, TEXT_COLOR
+import os
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, OVERLAY_COLOR, FONT_PATH, FONT_SIZE_LARGE, TEXT_COLOR, SOUNDS_FOLDER
 
 
 def show_end_screen(screen, clock, next_level, start_new_level_callback):
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
     overlay.fill(OVERLAY_COLOR)
     screen.blit(overlay, (0, 0))
+    button_click_sound = load_sound("button_click.wav")
 
     font = pygame.font.Font(FONT_PATH, FONT_SIZE_LARGE)
     text_surface = font.render("Уровень пройден!", True, TEXT_COLOR)
@@ -31,3 +33,20 @@ def show_end_screen(screen, clock, next_level, start_new_level_callback):
                     start_new_level_callback()
                 elif not next_level:
                     waiting = False
+            if event.type == pygame.KEYDOWN:
+                if event.key in [pygame.K_RETURN, pygame.K_SPACE, pygame.K_n]:
+                    play_sound(button_click_sound)
+
+
+def load_sound(file_name):
+    sound_path = os.path.join(SOUNDS_FOLDER, file_name)
+    if os.path.exists(sound_path):
+        return pygame.mixer.Sound(sound_path)
+    else:
+        print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
+        return None
+
+
+def play_sound(sound):
+    if sound:
+        sound.play()
