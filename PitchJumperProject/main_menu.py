@@ -1,6 +1,6 @@
 import pygame
 import os
-from constants import FONT_PATH, BACKGROUND_COLOR, LEFT_ARROW_SPRITE, SOUNDS_FOLDER
+from constants import FONT_PATH, BACKGROUND_COLOR, LEFT_ARROW_SPRITE
 
 
 class MainMenu:
@@ -20,14 +20,15 @@ class MainMenu:
         arrow_height = int(arrow_image.get_height() * arrow_scale)
         self.arrow_sprite = pygame.transform.scale(arrow_image, (arrow_width, arrow_height))
 
+        self.SOUNDS_FOLDER = r"C:\Users\Vova\Documents\GitHub\ChikenJumper\PitchJumperProject\ZVYKI"
         self.button_click_sound = self.load_sound("button_click.wav")
 
     def load_sound(self, file_name):
-        sound_path = os.path.join(SOUNDS_FOLDER, file_name)
+        sound_path = os.path.join(self.SOUNDS_FOLDER, file_name)
         if os.path.exists(sound_path):
             return pygame.mixer.Sound(sound_path)
         else:
-            print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
+            print(f"Warning: Sound file '{file_name}' not found in '{self.SOUNDS_FOLDER}'.")
             return None
 
     def play_sound(self, sound):

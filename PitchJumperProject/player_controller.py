@@ -1,7 +1,7 @@
 import pygame
 import os
 from constants import TILE_SIZE, CHIKEN_RUN_ANIM_TEXTURES, CHIKEN_RUN_ANIM_SPEED, PLAYER_TEXTURE, PASSABLE_TILES, FPS, \
-    TEXTURE_FOLDER, CHIKEN_IDLE_ANIM_SPEED, CHIKEN_IDLE_ANIM_TEXTURES, SOUNDS_FOLDER
+    TEXTURE_FOLDER, CHIKEN_IDLE_ANIM_SPEED, CHIKEN_IDLE_ANIM_TEXTURES
 
 
 class Player:
@@ -13,7 +13,7 @@ class Player:
         self.target_x, self.target_y = self.x, self.y
         self.tile_size = tile_size
         self.game_over = False
-        self.hp = 10
+        self.hp = 100
         self.moving = False
         self.speed = TILE_SIZE / (FPS // 3)
         self.offset_x = 0
@@ -22,17 +22,18 @@ class Player:
         self.move_dy = 0
         self.anim_index = 0
         self.anim_timer = 0
+        self.SOUNDS_FOLDER = r"C:\Users\Vova\Documents\GitHub\ChikenJumper\PitchJumperProject\ZVYKI"
         self.plus_sound = self.load_sound("plusCell.wav")
         self.minus_sound = self.load_sound("minusCell.wav")
         self.victory_sound = self.load_sound("victorySound.mp3")
         self.button_click_sound = self.load_sound("button_click.wav")
 
     def load_sound(self, file_name):
-        sound_path = os.path.join(SOUNDS_FOLDER, file_name)
+        sound_path = os.path.join(self.SOUNDS_FOLDER, file_name)
         if os.path.exists(sound_path):
             return pygame.mixer.Sound(sound_path)
         else:
-            print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
+            print(f"Warning: Sound file '{file_name}' not found in '{self.SOUNDS_FOLDER}'.")
             return None
 
     def play_sound(self, sound):
