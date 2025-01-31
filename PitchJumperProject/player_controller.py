@@ -26,7 +26,6 @@ class Player:
         self.plus_sound = self.load_sound("plusCell.wav")
         self.minus_sound = self.load_sound("minusCell.wav")
         self.victory_sound = self.load_sound("victorySound.mp3")
-        self.button_click_sound = self.load_sound("button_click.wav")
 
     def load_sound(self, file_name):
         sound_path = os.path.join(self.SOUNDS_FOLDER, file_name)
@@ -47,7 +46,7 @@ class Player:
                                  (self.y * self.tile_size + offset_y) + self.offset_y))
 
     def move(self, dx, dy, tile_map):
-        if self.hp <= 0 or self.moving:
+        if self.hp <= 0 or self.moving:  # Проверка, не закончилась ли игра и не идет ли движение
             return
 
         new_x = self.x + dx
@@ -66,11 +65,28 @@ class Player:
                 self.anim_index = 1
                 self.anim_timer = 0
 
-            if tile_map.check_if_end((new_x, new_y)):
-                tile_map.clear_tile_value(new_x, new_y)
-                return "level_complete"
+                if tile_map.check_if_end((new_x, new_y)):
+                    tile_map.clear_tile_value(new_x, new_y)
+                    self.play_sound(self.victory_sound)
+                    return "level_complete"
 
-    def update(self, tile_map):
+                total_hp_change = -1
+                if tile_value is not None:
+                    total_hp_change += tile_value
+
+                if total_hp_change < 0:
+                    self.play_sound(self.minus_sound)
+                elif total_hp_change > 0:
+                    self.play_sound(self.plus_sound)
+
+                self.change_hp(total_hp_change)
+
+                tile_map.clear_tile_value(new_x, new_y)
+
+                if tile_name == "SeedsPack":
+                    tile_map.clear_tile_value(new_x, new_y)
+
+    def update(self):
         if self.moving:
             self.offset_x += self.move_dx
             self.offset_y += self.move_dy
@@ -93,27 +109,14 @@ class Player:
                     pygame.image.load(os.path.join(TEXTURE_FOLDER, CHIKEN_IDLE_ANIM_TEXTURES[0])).convert_alpha(),
                     (self.tile_size, self.tile_size))
 
-                tile_name, tile_value = tile_map.parse_tile_name(tile_map.tiles[self.y][self.x])
-
-                if tile_map.check_if_end((self.x, self.y)):
-                    tile_map.clear_tile_value(self.x, self.y)
-                    self.play_sound(self.victory_sound)
-                    return "level_complete"
-
-                total_hp_change = -1
-                if tile_value is not None:
-                    total_hp_change += tile_value
-
-                if tile_value is not None and tile_value != 0:
-                    if total_hp_change < 0:
-                        self.play_sound(self.minus_sound)
-                    elif total_hp_change > 0:
-                        self.play_sound(self.plus_sound)
-
-                    self.change_hp(tile_value)
-
-                self.change_hp(total_hp_change)
-                tile_map.clear_tile_value(self.x, self.y)
+        else:  # Когда игрок не двигается, воспроизводим анимацию стояния
+            self.anim_timer += 1
+            if self.anim_timer >= CHIKEN_IDLE_ANIM_SPEED:
+                self.anim_index = (self.anim_index + 1) % len(CHIKEN_IDLE_ANIM_TEXTURES)
+                self.image = pygame.transform.scale(pygame.image.load(
+                    os.path.join(TEXTURE_FOLDER, CHIKEN_IDLE_ANIM_TEXTURES[self.anim_index])).convert_alpha(),
+                                                    (self.tile_size, self.tile_size))
+                self.anim_timer = 0
 
     def change_hp(self, amount):
         self.hp = max(0, self.hp + amount)
