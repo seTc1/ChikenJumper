@@ -6,9 +6,9 @@ FPS = 60  # Количество кадров в секунду
 
 # Настройки уровня и тайлов
 TILE_SIZE = 64  # Размер одной клетки тайла
-LEVEL_NAMES = ["Level_1.data", "Level_2.data"]  # Файл с уровнем
+LEVEL_NAMES = ["Level_1.data", "Level_2.data", "Level_3.data"]  # Файл с уровнем
 TEXTURE_FOLDER = "Textures"  # Папка с текстурами
-LEFT_ARROW_SPRITE = "Textures\LeftArrow.png"  # Папка с текстурами
+LEFT_ARROW_SPRITE = "Textures\LeftArrow.png"
 
 FONT_SIZE = 24  # Размер пользовательского шрифта
 
@@ -34,3 +34,7 @@ CHIKEN_IDLE_ANIM_SPEED = 7
 TEXT_COLOR = (255, 255, 255)
 OVERLAY_COLOR = (0, 0, 0, 180)
 FONT_SIZE_LARGE = 52
+
+# Настройки ЗВУКОВ
+
+SOUNDS_FOLDER = "Sounds"
