@@ -1,6 +1,6 @@
-
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, OVERLAY_COLOR, FONT_PATH, FONT_SIZE_LARGE, TEXT_COLOR
+
 
 def show_end_screen(screen, clock, next_level, start_new_level_callback):
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
