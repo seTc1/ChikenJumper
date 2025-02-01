@@ -40,8 +40,9 @@ class Player:
             print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
             return None
 
-    def play_sound(self, sound):
+    def play_sound(self, sound, volume):
         if sound:
+            sound.set_volume(volume)
             sound.play()
 
     def draw(self, screen, offset_x, offset_y):
@@ -77,15 +78,15 @@ class Player:
 
                 if tile_map.check_if_end((new_x, new_y)):
                     tile_map.clear_tile_value(new_x, new_y)
-                    self.play_sound(self.victory_sound)
+                    self.play_sound(self.victory_sound, 0.5)
                     return "level_complete"
 
                 total_hp_change = tile_value if tile_value is not None else 0
 
                 if total_hp_change > 0:
-                    self.play_sound(self.plus_sound)
+                    self.play_sound(self.plus_sound, 0.65)
                 elif total_hp_change < 0:
-                    self.play_sound(self.minus_sound)
+                    self.play_sound(self.minus_sound, 0.65)
 
                 if total_hp_change != 0:
                     self.change_hp(total_hp_change)
@@ -94,8 +95,6 @@ class Player:
 
                 if tile_name == "SeedsPack":
                     tile_map.clear_tile_value(new_x, new_y)
-
-                self.play_sound(random.choice(self.step_sounds))
 
     def update(self):
         if self.moving:
@@ -108,6 +107,7 @@ class Player:
                 self.image = pygame.transform.scale(pygame.image.load(
                     os.path.join(TEXTURE_FOLDER, CHIKEN_RUN_ANIM_TEXTURES[self.anim_index])).convert_alpha(),
                                                     (self.tile_size, self.tile_size))
+                self.play_sound(random.choice(self.step_sounds), 0.07)
                 self.anim_timer = 0
 
             if abs(self.offset_x) >= TILE_SIZE or abs(self.offset_y) >= TILE_SIZE:
