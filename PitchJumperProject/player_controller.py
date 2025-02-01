@@ -1,12 +1,12 @@
 import random
 import pygame
 import os
-from constants import TILE_SIZE, CHIKEN_RUN_ANIM_TEXTURES, CHIKEN_RUN_ANIM_SPEED, PLAYER_TEXTURE, PASSABLE_TILES, FPS, \
+from constants import TILE_SIZE, CHIKEN_RUN_ANIM_TEXTURES, CHIKEN_RUN_ANIM_SPEED, PASSABLE_TILES, FPS, \
     TEXTURE_FOLDER, CHIKEN_IDLE_ANIM_SPEED, CHIKEN_IDLE_ANIM_TEXTURES, SOUNDS_FOLDER
 
 
 class Player:
-    def __init__(self, texture, position, tile_size):
+    def __init__(self, position, tile_size):
         self.anim_frames = [pygame.transform.scale(pygame.image.load(os.path.join(TEXTURE_FOLDER, img)).convert_alpha(),
                                                    (tile_size, tile_size)) for img in CHIKEN_IDLE_ANIM_TEXTURES]
         self.image = self.anim_frames[0]
@@ -51,6 +51,9 @@ class Player:
         image = pygame.transform.flip(self.image, not self.facing_right, False)  # Флип изображения
         screen.blit(image, ((self.x * self.tile_size + offset_x) + self.offset_x,
                             (self.y * self.tile_size + offset_y) + self.offset_y))
+
+    def get_hp(self):
+        return self.hp
 
     def move(self, dx, dy, tile_map):
         if self.hp <= 0 or self.moving:  # Проверка, не закончилась ли игра и не идет ли движение

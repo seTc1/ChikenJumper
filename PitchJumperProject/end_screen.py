@@ -2,6 +2,13 @@ import pygame
 import os
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, OVERLAY_COLOR, FONT_PATH, FONT_SIZE_LARGE, TEXT_COLOR, SOUNDS_FOLDER
 
+def load_player_score():
+    try:
+        with open("player_results.data", "r") as file:
+            return int(file.read().strip())
+    except Exception as e:
+        print(f"Error loading score: {e}")
+        return 0
 
 def show_end_screen(screen, clock, next_level, start_new_level_callback):
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
@@ -19,6 +26,12 @@ def show_end_screen(screen, clock, next_level, start_new_level_callback):
     instruction_rect = instruction_surface.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
     screen.blit(instruction_surface, instruction_rect)
 
+    score = load_player_score()
+    score_surface = font.render(f"Очки: {score}", True, TEXT_COLOR)
+    score_rect = score_surface.get_rect(topright=(SCREEN_WIDTH - 20, 20))
+    screen.blit(score_surface, score_rect)
+
+    score_collider = pygame.Rect(score_rect.x, score_rect.y, score_rect.width, score_rect.height)
     pygame.display.flip()
 
     waiting = True
@@ -33,10 +46,8 @@ def show_end_screen(screen, clock, next_level, start_new_level_callback):
                     start_new_level_callback()
                 elif not next_level:
                     waiting = False
-            if event.type == pygame.KEYDOWN:
                 if event.key in [pygame.K_RETURN, pygame.K_SPACE, pygame.K_n]:
                     play_sound(button_click_sound)
-
 
 def load_sound(file_name):
     sound_path = os.path.join(SOUNDS_FOLDER, file_name)
@@ -45,7 +56,6 @@ def load_sound(file_name):
     else:
         print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
         return None
-
 
 def play_sound(sound):
     if sound:

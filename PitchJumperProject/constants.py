@@ -20,6 +20,7 @@ HEART_SIZE = 100  # Размер спрайта сердца
 HP_TEXT_SIZE = 50  # Размер текста здоровья
 HEART_TEXTURE = "Textures\Heart.png"  # Текстура сердца
 FONT_PATH = "pixel.otf"  # Путь к шрифту
+HEART_SOUND = "heart.collect.wav"  # Путь к шрифту
 
 # Настройки игрока
 PLAYER_TEXTURE = "ChikenIdle.png"  # Текстура персонажа

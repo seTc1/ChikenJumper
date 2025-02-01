@@ -1,6 +1,5 @@
 import pygame
 import os
-import time
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_NAMES, FONT_PATH, \
     FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE, SOUNDS_FOLDER
 from tilemap import TileMap
@@ -33,7 +32,7 @@ class Game:
         if os.path.exists(sound_path):
             return pygame.mixer.Sound(sound_path)
         else:
-            rint(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
+            print(f"Warning: Sound file '{file_name}' not found in '{SOUNDS_FOLDER}'.")
             return None
 
     def play_sound(self, sound):
@@ -69,7 +68,7 @@ class Game:
             print("Ошибка: Начальная или конечная позиция не указаны в уровне.")
             return False
 
-        self.player = Player(os.path.join(TEXTURE_FOLDER, PLAYER_TEXTURE), self.tile_map.start_pos, TILE_SIZE)
+        self.player = Player(self.tile_map.start_pos, TILE_SIZE)
         self.hud = HUD(self.screen)
         self.camera_x = self.player.x * TILE_SIZE
         self.camera_y = self.player.y * TILE_SIZE
