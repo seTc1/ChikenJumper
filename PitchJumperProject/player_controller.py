@@ -28,6 +28,7 @@ class Player:
         self.plus_sound = self.load_sound("plusCell.wav")
         self.minus_sound = self.load_sound("minusCell.wav")
         self.victory_sound = self.load_sound("victorySound.mp3")
+        self.step_sounds = [self.load_sound(f"Gravel_hit{i}.ogg") for i in range(1, 5)]
 
     def load_sound(self, file_name):
         sound_path = os.path.join(SOUNDS_FOLDER, file_name)
@@ -86,13 +87,15 @@ class Player:
                 elif total_hp_change < 0:
                     self.play_sound(self.minus_sound)
 
-                if total_hp_change != 0:  # Убираем звук, если значение 0
+                if total_hp_change != 0:
                     self.change_hp(total_hp_change)
 
                 tile_map.clear_tile_value(new_x, new_y)
 
                 if tile_name == "SeedsPack":
                     tile_map.clear_tile_value(new_x, new_y)
+
+                self.play_sound(random.choice(self.step_sounds))
 
     def update(self):
         if self.moving:
