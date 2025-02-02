@@ -1,5 +1,5 @@
-GrassTile GrassTile GrassLeftTopCircle GrassDown GrassDown GrassDown GrassRightTopCircle GrassTile GrassTile
-GrassLeftTopCircle  GrassDown GrassRightDown PathTile1(-1) PathTile3(+7) PathTile2(-1) GrassLeftDown GrassDown GrassRightTopCircle
-GrassRight start_PathTile1 PathTile2(+2) PathTile3(-6) GrassMiddle PathTile1(-3) PathTile1(+1) end_PathTile2 GrassLeft
-GrassLeftDownCircle GrassTop GrassRightTop PathTile2(+1) PathTile3(0) PathTile2(+2) GrassLeftTop GrassTop GrassRightDownCircle
-GrassTile GrassTile GrassLeftDownCircle GrassTop GrassTop GrassTop GrassRightDownCircle GrassTile GrassTile
+GrassTile           GrassTile       GrassLeftTopCircle  GrassDown     GrassDown     GrassDown     GrassRightTopCircle  GrassTile     GrassTile
+GrassLeftTopCircle  GrassDown       GrassRightDown      PathTile1(-1) PathTile3(+7) PathTile2(-1) GrassLeftDown        GrassDown     GrassRightTopCircle
+GrassRight          start_PathTile1 PathTile2(+2)       PathTile3(-6) GrassMiddle   PathTile1(-3) PathTile1(+1)        end_PathTile2 GrassLeft
+GrassLeftDownCircle GrassTop        GrassRightTop       PathTile2(+1) PathTile3(0)  PathTile2(+2) GrassLeftTop         GrassTop      GrassRightDownCircle
+GrassTile           GrassTile       GrassLeftDownCircle GrassTop      GrassTop      GrassTop      GrassRightDownCircle GrassTile     GrassTile

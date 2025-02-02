@@ -6,7 +6,7 @@ FPS = 60  # Количество кадров в секунду
 
 # Настройки уровня и тайлов
 TILE_SIZE = 64  # Размер одной клетки тайла
-LEVEL_NAMES = ["Level_1.data", "Level_2.data", "Level_3.data"]  # Файл с уровнем
+LEVEL_NAMES = ["Level_1.data", "Level_2.data", "Level_3.data", "Level_4.data", "Level_5.data", "Level_6.data", "Level_7.data"]  # Файл с уровнем
 TEXTURE_FOLDER = "Textures"  # Папка с текстурами
 LEFT_ARROW_SPRITE = "Textures\LeftArrow.png"
 
