@@ -52,9 +52,6 @@ class Player:
         screen.blit(image, ((self.x * self.tile_size + offset_x) + self.offset_x,
                             (self.y * self.tile_size + offset_y) + self.offset_y))
 
-    def get_hp(self):
-        return self.hp
-
     def move(self, dx, dy, tile_map):
         if self.hp <= 0 or self.moving:  # Проверка, не закончилась ли игра и не идет ли движение
             return
@@ -91,8 +88,7 @@ class Player:
                 elif total_hp_change < 0:
                     self.play_sound(self.minus_sound, 0.65)
 
-                if total_hp_change != 0:
-                    self.change_hp(total_hp_change)
+                self.change_hp(total_hp_change - 1)
 
                 tile_map.clear_tile_value(new_x, new_y)
 

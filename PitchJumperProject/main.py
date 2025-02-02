@@ -1,7 +1,7 @@
 import pygame
 import os
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_NAMES, FONT_PATH, \
-    FONT_SIZE, BACKGROUND_COLOR, PLAYER_TEXTURE, SOUNDS_FOLDER
+    FONT_SIZE, BACKGROUND_COLOR, SOUNDS_FOLDER
 from tilemap import TileMap
 from player_controller import Player
 from hud import HUD
@@ -87,7 +87,7 @@ class Game:
         if not self.next_level():
             self.running = False
 
-    def draw_game(self):
+    def draw_background(self):
         self.screen.fill(BACKGROUND_COLOR)
         self.camera_x += (self.player.x * TILE_SIZE + self.player.offset_x - self.camera_x) * 0.1
         self.camera_y += (self.player.y * TILE_SIZE + self.player.offset_y - self.camera_y) * 0.1
@@ -96,6 +96,9 @@ class Game:
         self.tile_map.draw(offset_x, offset_y)
         self.player.draw(self.screen, offset_x, offset_y)
         self.hud.draw_hp(self.player.hp)
+
+    def draw_game(self):
+        self.draw_background()
         pygame.display.flip()
 
     def game_loop(self):
@@ -106,7 +109,9 @@ class Game:
                     case pygame.QUIT:
                         self.running = False
                     case pygame.USEREVENT if self.level_complete:
-                        show_end_screen(self.screen, self.clock, True, self.start_new_level)
+                        show_end_screen(self.screen, self.clock, True, self.start_new_level, self.draw_background,
+                                        self.player.hp)
+
                     case pygame.KEYDOWN:
                         match event.key:
                             case pygame.K_ESCAPE:
