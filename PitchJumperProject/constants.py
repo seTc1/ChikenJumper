@@ -1,6 +1,6 @@
 # Настройки экрана
 APP_ICON = "App_Icon.png"
-EXE_ICON = "Exe_Icon.png"
+EXE_ICON = "Exe_Icon.ico"
 SCREEN_WIDTH = 1920  # Ширина окна
 SCREEN_HEIGHT = 1080  # Высота окна
 FULLSCREEN = True  # Полноэкранный режим

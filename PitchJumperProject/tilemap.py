@@ -17,8 +17,9 @@ class TileMap:
         self.load_level()  # Загрузка уровня
 
     def load_textures(self):
-        # Загрузка всех текстур из указанной папки
         for texture_name in os.listdir(self.texture_folder):
+            if not texture_name.lower().endswith((".png", ".jpg", ".jpeg", ".bmp")):
+                continue  # Пропускаем неподдерживаемые форматы
             texture_path = os.path.join(self.texture_folder, texture_name)
             if os.path.isfile(texture_path):
                 texture_surface = pygame.image.load(texture_path).convert_alpha()

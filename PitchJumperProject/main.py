@@ -9,7 +9,6 @@ from main_menu import MainMenu
 from end_screen import show_end_screen
 import sys
 
-
 class Game:
     def __init__(self):
         pygame.init()
