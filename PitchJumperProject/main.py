@@ -1,13 +1,15 @@
 import pygame
 import os
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FULLSCREEN, FPS, TILE_SIZE, TEXTURE_FOLDER, LEVEL_NAMES, FONT_PATH, \
-    FONT_SIZE, BACKGROUND_COLOR, SOUNDS_FOLDER
+    FONT_SIZE, BACKGROUND_COLOR, SOUNDS_FOLDER, APP_ICON
 from tilemap import TileMap
 from player_controller import Player
 from hud import HUD
 from main_menu import MainMenu
 from end_screen import show_end_screen
 import sys
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -40,6 +42,7 @@ class Game:
 
     def display_main_menu(self):
         menu = MainMenu(self.screen)
+        pygame.display.set_icon(pygame.image.load(os.path.join(TEXTURE_FOLDER, APP_ICON)))
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -82,13 +85,14 @@ class Game:
     def restart_level(self):
         return self.load_level()
 
-
     def next_level(self):
         self.current_level_id += 1
         if self.current_level_id >= len(LEVEL_NAMES):
             with open("player_results.data", "r") as file:
                 if int(file.read().strip()) < 65:
                     self.play_loose_anim()
+                else:
+                    self.current_level_id = 666
         return self.load_level()
 
     def play_loose_anim(self):
@@ -105,10 +109,9 @@ class Game:
             self.screen.blit(lose_image, (0, 0))
             pygame.display.flip()
 
-
         sound = self.load_sound("loose_anim.mp3")
         if sound:
-            sound.set_volume(100)
+            sound.set_volume(1000)
             sound.play()
 
         if sound:
@@ -127,6 +130,7 @@ class Game:
 
         pygame.quit()
         sys.exit()
+
     def start_new_level(self):
         if not self.next_level():
             self.running = False
